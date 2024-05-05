@@ -50,7 +50,7 @@ export const showblogState = atom({
 export const showblogvalState = selector({
     key : "editblogvalState",
     get : ({get}) => {
-        const blog = get(editblogState);
+        const blog = get(showblogState);
         return blog;
     }
 })
