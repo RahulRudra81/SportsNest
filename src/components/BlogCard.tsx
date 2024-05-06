@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 import { useSetRecoilState } from 'recoil';
 import { editblogState, showblogState } from '@/app/recoilContextProvider';
+import Swal from 'sweetalert2'
+import 'sweetalert2/src/sweetalert2.scss'
 
 const BlogCard = ({ title, shortDescription, description, imageUrl, id, category, username } : 
     {
@@ -27,17 +29,35 @@ const BlogCard = ({ title, shortDescription, description, imageUrl, id, category
   const  setShowblog = useSetRecoilState(showblogState)
 
   const handleDelete = async () => {
-    console.log(id)
-      if (id) {
-        const res = await fetch('/api/blog/delete-blog', {
-        method : "DELETE",
-        headers : {"blogid" : id.toString(),"Cache-Control": "no-store"}
-      })
-      const data = await res.json();
-      if (res.ok) toast.success("Blog Deleted successfully");
-      else toast.error(data.message || "INTERNAL ERROR");
-    }
-    else toast.error("Invalid Blog Id")
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+          if (id) {
+          const res = await fetch('/api/blog/delete-blog', {
+          method : "DELETE",
+          headers : {"blogid" : id.toString(),"Cache-Control": "no-store"}
+          })
+          const data = await res.json();
+          if (!res.ok) toast.error(data.message || "INTERNAL ERROR");
+        }
+        else toast.error("Invalid Blog Id")
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+        window.location.href = "/"
+      }
+    });
+    // console.log(id)
+    
     // console.log("Delete button clicked for blog with ID:", id);
   };
 
