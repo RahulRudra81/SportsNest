@@ -6,6 +6,8 @@ import Head from 'next/head';
 import BlogCard from '@/components/BlogCard';
 import { useRecoilValue } from 'recoil';
 import { blogsArrayState } from './recoilContextProvider';
+import Image from 'next/image';
+import Loader from '../../public/page-loader/loader.gif'
 
 type Blog = {
   title: string;
@@ -20,6 +22,12 @@ type Blog = {
 function HomePage() {
   const blogs: Blog[] = useRecoilValue(blogsArrayState);
   
+  if (!blogs.length) return (
+    <div className='flex h-screen justify-center items-center'>
+      <Image src={Loader} alt='Loading...' width={50} height={50}/>
+    </div>
+  )
+
   return (
     <>
       <Head>

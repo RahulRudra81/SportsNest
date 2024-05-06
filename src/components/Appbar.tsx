@@ -53,7 +53,7 @@ const AppBar = () => {
         </Link>
         <Link href={userId ? "/create-blog" : '/sign-in'}><p className="text-gray-300 text-sm cursor-pointer">Create Blog</p></Link>
         </div>
-        <form className="flex items-center">
+        <form className="max-md:hidden flex items-center">
           <input
             value={category}
             type="text"

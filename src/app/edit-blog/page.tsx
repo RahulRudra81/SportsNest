@@ -35,6 +35,16 @@ const page = () => {
         
     }, [userId]);
 
+    useEffect(()=>{
+      if (editblog.title !== ''){
+        localStorage.setItem(`editblog${id}.title`, editblog.title);
+        localStorage.setItem(`editblog${id}.shortDescription`, editblog.shortDescription);
+        localStorage.setItem(`editblog${id}.imageUrl`, editblog.imageUrl);
+        localStorage.setItem(`editblog${id}.category`, editblog.category);
+        localStorage.setItem(`editblog${id}.description`, editblog.description);
+      }
+    }, [])
+
   const [title, setTitle] = useState<string>(editblog.title);
   const [shortDescription, setShortDescription] = useState<string>(editblog.shortDescription);
   const [imageUrl, setImageUrl] = useState<string>(editblog.imageUrl);
@@ -57,10 +67,12 @@ const page = () => {
 
   const handleChangeDescription = (value: string) => {
     setDescription(value);
+    localStorage.setItem(`editblog${id}.description`, value)
   };
 
   const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setCategory(event.target.value);
+    localStorage.setItem(`editblog${id}.category`, event.target.value)
   };
 
   const handleShortDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -69,6 +81,7 @@ const page = () => {
     setRemainingCharacters(remaining);
     if (value.length <= 100) {
       setShortDescription(value);
+      localStorage.setItem(`editblog${id}.shortDescription`, value)
     } else {
       setShortDescription(value.slice(0, 100));
     }
@@ -125,8 +138,8 @@ const page = () => {
               id="title"
               name="title"
               className="mt-1 p-2 border border-gray-300 rounded w-full"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={localStorage.getItem(`editblog${id}.title`) || title}
+              onChange={(e) => {setTitle(e.target.value), localStorage.setItem(`editblog${id}.title`, e.target.value)}}
             />
           </div>
           <div className="mb-4">
@@ -139,7 +152,7 @@ const page = () => {
               id="shortDescription"
               name="shortDescription"
               className="mt-1 p-2 border border-gray-300 rounded w-full h-40 "
-              value={shortDescription}
+              value={localStorage.getItem(`editblog${id}.shortDescription`)||shortDescription}
               onChange={handleShortDescriptionChange}
 
             />
@@ -161,10 +174,13 @@ const page = () => {
             />
             <div className="relative">
             {showLoader && (
-              <div className="absolute top-1/2 left-60 transform -translate-x-1/2 -translate-y-1/2 ">
+              <div className="absolute top-1/2 left-60 transform -translate-x-1/2 -translate-y-1/2">
                 <Image src={loader} alt="Loading..." width={90} height={70} />
               </div>
             )}
+            <div className="absolute top-1/2 left-96 transform -translate-x-1/2 -translate-y-1/2">
+                <img src={localStorage.getItem(`editblog${id}.imageUrl`) || imageUrl} alt="Loading..." width={90} height={70} />
+            </div>
             <button
             className="ml-2 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
             onClick={async (e) => {
@@ -178,10 +194,10 @@ const page = () => {
                     });
                     // console.log(res.url)
                     setImageUrl(res.url);
+                    localStorage.setItem(`editblog${id}.imageUrl`, res.url)
                   } else
                   {
                       setImageUrl("https://placehold.co/600x400/000000/FFF0");
-                      
                   }
             }}
             disabled={showLoader}
@@ -196,7 +212,7 @@ const page = () => {
             </label>
             <ReactQuill
               theme="snow"
-              value={description}
+              value={localStorage.getItem(`editblog${id}.description`)||description}
               onChange={handleChangeDescription}
               className="description-editor h-96 mb-14 "
             />
@@ -209,7 +225,7 @@ const page = () => {
               id="category"
               name="category"
               className="mt-1 p-2 border border-gray-300 rounded w-full overflow-hidden"
-              value={category}
+              value={localStorage.getItem(`editblog${id}.category`)||category}
               onChange={handleCategoryChange}
             >
               <option value="">Select a category</option>

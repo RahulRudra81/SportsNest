@@ -1,15 +1,36 @@
 'use client';
 import { useRecoilValue } from 'recoil';
 import { showblogvalState } from "../recoilContextProvider";
+import { useEffect, useState } from 'react';
 
 import React from 'react'
 import { useSearchParams } from 'next/navigation'
 function page() {
     const searchParams = useSearchParams()
     const id = searchParams.get('id');
-    const blog = useRecoilValue(showblogvalState);
+    const [blog, setBlog] = useState(useRecoilValue(showblogvalState));
     const desc = blog.description.replace(/<p>/g, '').replace(/<\/p>/g, '')
 // console.log(blog)
+    useEffect(()=>{
+      if (blog.title !== ''){
+        localStorage.setItem(`blog${id}.title`, blog.title);
+        localStorage.setItem(`blog${id}.description`, blog.description);
+        localStorage.setItem(`blog${id}.imageUrl`, blog.imageUrl);
+        localStorage.setItem(`blog${id}.category`, blog.category);
+        localStorage.setItem(`blog${id}.username`, blog.username);
+      }
+      else {
+        const title = localStorage.getItem(`blog${id}.title`) || '';
+        const description = localStorage.getItem(`blog${id}.description`) || '';
+        const imageUrl = localStorage.getItem(`blog${id}.imageUrl`) || '';
+        const category = localStorage.getItem(`blog${id}.category`) || '';
+        const username = localStorage.getItem(`blog${id}.username`) || '';
+  
+        setBlog({title, description, imageUrl, category, username});
+      }
+    }, [])
+    
+
     if (!blog) {
         return <div>Loading...</div>;
       }
