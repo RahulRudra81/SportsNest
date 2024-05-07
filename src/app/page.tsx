@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { blogsArrayState } from './recoilContextProvider';
 import Image from 'next/image';
 import Loader from '../../public/page-loader/loader.gif'
-import Logo from '../../public/Mainpage Logo.png'
+import Logo from '../../public/MainpageLogo.png'
 import Home from '@/components/Home'
 import { Typography } from '@mui/material';
 
