@@ -4,7 +4,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 export async function POST(request: Request) {
     noStore();
-    const username = request.headers.get('username');
+    const username = 'test'
     const data = await request.json();
     const { title, shortDescription, description, imageUrl, category } = data;
 

@@ -42,7 +42,6 @@ export const showblogState = atom({
         description : "",
         imageUrl : "",
         category : "",
-        username : ""
     }
 })
 

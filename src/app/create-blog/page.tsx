@@ -9,24 +9,25 @@ import Image from "next/image";
 import loader from "../../../public/create-blog-loader/Loader.gif";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { useUser } from '@clerk/clerk-react';
-import { useAuth } from "@clerk/nextjs";
+// import { useUser } from '@clerk/clerk-react';
+// import { useAuth } from "@clerk/nextjs";
 import { useRouter } from 'next/navigation'
+import { ClassNames } from "@emotion/react";
 
 const page = () => {
     const router = useRouter()
-    const { user } = useUser();
-    const username = user?.username;
-    const {userId} = useAuth();
-    useEffect(() => {
-        setTimeout(()=>{
-            if (!userId) {
-                router.push('/', { scroll: false })
-                }
-        }, 3000)
+    // const { user } = useUser();
+    // const username = user?.username;
+    // const {userId} = useAuth();
+    // useEffect(() => {
+    //     setTimeout(()=>{
+    //         if (!userId) {
+    //             router.push('/', { scroll: false })
+    //             }
+    //     }, 3000)
         
         
-    }, [userId]);
+    // }, [userId]);
 
   const [title, setTitle] = useState<string>();
   const [shortDescription, setShortDescription] = useState<string>();
@@ -68,8 +69,8 @@ const page = () => {
   };
 
   return (
-    <>
-      <div className="container mx-auto mt-8 flex  flex-col items-center justify-center">
+    <div className="p-5">
+      <div className="container mx-auto mt-8 flex flex-col items-center justify-center">
         <h1 className="text-3xl font-bold mb-4">Create Blog</h1>
         <form
           className="w-full lg:px-60"
@@ -80,13 +81,10 @@ const page = () => {
               return;
             }
            
-
-            if (username){
             const res = await fetch("/api/blog/add-blog", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  "username" : username
                 },
                 body: JSON.stringify({
                   title,
@@ -101,7 +99,6 @@ const page = () => {
             if (res.ok) toast.success("Blog posted successfully");
             else toast.error(data.message || "INTERNAL ERROR");
             
-            }
             setTitle("");
             setShortDescription("");
             setDescription("");
@@ -145,7 +142,7 @@ const page = () => {
               type="file"
               id="coverImage"
               name="coverImage"
-              className="mt-1 p-2 border border-gray-300 rounded w-full"
+              className="mt-1 p-2 border border-[#EEEEEE] rounded w-full"
               onChange={(e) => {
                 if (e.target.files) {
                   setFile(e.target.files?.[0]);
@@ -159,7 +156,7 @@ const page = () => {
               </div>
             )}
             <button
-            className="ml-2 bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+            className="ml-2 bg-[#222831] hover:bg-[#393E46] text-white px-2 py-1 rounded"
             onClick={async (e) => {
                 e.preventDefault();
                 if (file) {
@@ -221,7 +218,7 @@ const page = () => {
             )} */}
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-[#222831] hover:bg-[#393E46] text-white px-4 py-2 rounded "
             //   disabled={showLoader}
             >
               Create Blog
@@ -238,7 +235,7 @@ const page = () => {
           }
         `}</style>
       </div>
-    </>
+    </div>
   );
 };
 
