@@ -6,12 +6,49 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useState, useEffect } from 'react';
+import siteMetadata from '@/app/utils/siteMetadata';
 
+type Blog = {
+    "title" : string,
+    "shortdescription" : string,
+    "description" : string,
+    "imageurl" : string,
+    "category" : string,
+}
 
- 
+export const ShowBlog = ({id} : any) => {
+    const [blog, setBlog] = useState<Blog>({
+        "title" : "",
+        "shortdescription" : "",
+        "description" : "",
+        "imageurl" : "",
+        "category" : "",
+    });
 
-export const ShowBlog = ({blog} : any) => {
+    useEffect (() => {
+        const fun = async () => {
+            try{
+            const res = await fetch (`${siteMetadata.siteUrl}/api/blog/get-blog`, {
+                method : "GET",
+                headers : {
+                    "Content-Type": "application/json",
+                    "id" : id,
+                }
+            })
+            const data = await res.json();
+            console.log(data.blogs.rows[0])
+            setBlog(data.blogs.rows[0]);
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        fun();
+    }, [])
+
     console.log("Blog from ShowBlog Component  " + blog)
+
     
   return (
     <div className='w-screen p-10'>
