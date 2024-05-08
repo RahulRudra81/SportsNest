@@ -1,4 +1,8 @@
-import {ShowBlog} from "@/components/ShowBlog";
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
 import siteMetadata from "@/app/utils/siteMetadata";
 
 export async function generateMetadata ({params} : any) {
@@ -57,7 +61,23 @@ export default async function page ({params} : any) {
    // console.log(blog)
    return (
       <>
-    <ShowBlog blog = {blog}/>
+    <div className='w-screen p-10'>
+    <Card sx={{ maxWidth: 14440 }}>
+      <div className='flex justify-center items-center'>
+      <img src = {blog.imageurl} className='w-60 h-60 ' />
+      </div>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {blog.title}
+        </Typography>
+        <div dangerouslySetInnerHTML={{ __html: blog.description }}>
+        </div>
+      </CardContent>
+      <CardActions>
+        <Button variant='outlined' size="small">{blog.category}</Button>
+      </CardActions>
+    </Card>
+    </div>
     </>
    )
 }
