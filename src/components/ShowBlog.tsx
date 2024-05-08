@@ -8,37 +8,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 
-const fetchBlog = async (id : any) => {
-   
-    try{
-    const res = await fetch ('http://localhost:3000/api/blog/get-blog', {
-       method : "GET",
-       headers : {
-          "Content-Type": "application/json",
-          "id" : id,
-       }
-    })
-    const data = await res.json();
-    // console.log(data.blogs.rows[0])
-    return data.blogs.rows[0];
-    }
-    catch (err) {
-       console.log(err);
-    }
- }
+
  
 
-export const ShowBlog = ({id} : any) => {
-    const [blog, setBlog] = useState({"title" : "", "description" : "", "shortdescription" : "", "imageurl" : "", "category" : ""});
+export const ShowBlog = ({blog} : any) => {
     console.log(blog)
-    useEffect(()=>{
-        const fun = async () => {
-            const res = await fetchBlog(id);
-            setBlog(res);
-        }
-        
-        fun()
-    }, [])
     const desc = blog.description.replace(/<p>/g, '').replace(/<\/p>/g, '')
     
   return (
