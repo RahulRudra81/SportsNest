@@ -1,5 +1,4 @@
 import {ShowBlog} from "@/components/ShowBlog";
-import { title } from "process";
 import siteMetadata from "@/app/utils/siteMetadata";
 
 export async function generateMetadata ({params} : any) {
@@ -54,11 +53,11 @@ export default async function page ({params} : any) {
    console.log(siteMetadata.siteUrl + `/show-blog/${params.id}`)
    const id = params.id;
    // console.log('hit')
-   const blog = await fetchBlog(id)
+   // const blog = await fetchBlog(id)
    // console.log(blog)
    return (
       <>
-    <ShowBlog blog = {blog}/>
+    <ShowBlog id = {id}/>
     </>
    )
 }
