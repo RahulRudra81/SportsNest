@@ -6,14 +6,12 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
 
 
  
 
 export const ShowBlog = ({blog} : any) => {
-    console.log(blog)
-    const desc = blog.description.replace(/<p>/g, '').replace(/<\/p>/g, '')
+    console.log("Blog from ShowBlog Component  " + blog)
     
   return (
     <div className='w-screen p-10'>
@@ -25,7 +23,7 @@ export const ShowBlog = ({blog} : any) => {
         <Typography gutterBottom variant="h5" component="div">
           {blog.title}
         </Typography>
-        <div dangerouslySetInnerHTML={{ __html: desc }}>
+        <div dangerouslySetInnerHTML={{ __html: blog.description }}>
         </div>
       </CardContent>
       <CardActions>
