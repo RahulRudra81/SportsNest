@@ -9,7 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useSetRecoilState } from 'recoil';
-import { editblogState, showblogState } from '@/app/recoilContextProvider';
+import { editblogState} from '@/app/recoilContextProvider';
 import Link from 'next/link';
 import Swal from 'sweetalert2'
 import 'sweetalert2/src/sweetalert2.scss'
@@ -26,8 +26,7 @@ export default function BlockCard({ title, shortDescription, description, imageU
           category : string
       }) {
 
-    const  setEditblog = useSetRecoilState(editblogState);
-    const  setShowblog = useSetRecoilState(showblogState);
+    const setEditblog = useSetRecoilState(editblogState);
     const router = useRouter();
 
     const handleDelete = async () => {
@@ -73,24 +72,14 @@ export default function BlockCard({ title, shortDescription, description, imageU
 
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <Link href={`show-blog?id=${id}`} onClick={() => {setShowblog({
-      title,
-      description,
-      imageUrl,
-      category,
-    })}}>
+      <Link href={`show-blog/${id}`}>
       <CardMedia
         sx={{ height: 140 }}
         image={imageUrl}
         title="green iguana"
       />
       </Link>
-      <Link href={`show-blog?id=${id}`} onClick={() => {setShowblog({
-      title,
-      description,
-      imageUrl,
-      category,
-    })}}>
+      <Link href={`show-blog/${id}`}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {title}

@@ -35,24 +35,6 @@ export const editblogvalState = selector({
     }
 })
 
-export const showblogState = atom({
-    key : "editblogState",
-    default: {
-        title : "",
-        description : "",
-        imageUrl : "",
-        category : "",
-    }
-})
-
-
-export const showblogvalState = selector({
-    key : "editblogvalState",
-    get : ({get}) => {
-        const blog = get(showblogState);
-        return blog;
-    }
-})
 
 export default function RecoidContextProvider({ children }: { children: React.ReactNode }) {
   return <RecoilRoot>{children}</RecoilRoot>;

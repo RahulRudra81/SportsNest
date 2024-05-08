@@ -6,6 +6,7 @@ import { EdgeStoreProvider } from '../lib/edgestore';
 import { Toaster } from "react-hot-toast";
 import React from 'react';
 import RecoidContextProvider from "./recoilContextProvider";
+import siteMetadata from '@/app/utils/siteMetadata'
 
 import Appbar from "../components/Appbar"
 import Footer from "../components/Footer";
@@ -14,8 +15,36 @@ import { InitBlogs } from "@/components/InitBlogs";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Blog Nest",
-  description: "Read and Create Blogs over Blog Nest",
+  metadataBase: new URL(siteMetadata.siteUrl),
+  title: siteMetadata.title,
+  description: siteMetadata.description,
+  openGraph: {
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+    url: siteMetadata.siteUrl,
+    siteName: siteMetadata.title,
+    images: [
+    siteMetadata.socialBanner
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter : {
+    title : siteMetadata.title,
+    images : [siteMetadata.socialBanner],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: false,
+      noimageindex: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
