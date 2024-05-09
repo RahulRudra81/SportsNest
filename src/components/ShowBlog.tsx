@@ -15,6 +15,8 @@ type Blog = {
     "description" : string,
     "imageurl" : string,
     "category" : string,
+    "username" : string,
+    "publishtime" : string,
 }
 
 export const ShowBlog = ({id} : any) => {
@@ -24,6 +26,8 @@ export const ShowBlog = ({id} : any) => {
         "description" : "",
         "imageurl" : "",
         "category" : "",
+        "username" : "",
+        "publishtime" : "",
     });
 
     useEffect (() => {
@@ -57,9 +61,14 @@ export const ShowBlog = ({id} : any) => {
       <img src = {blog.imageurl} className='w-60 h-60 ' />
       </div>
       <CardContent>
+        <div className='mb-10'>
         <Typography gutterBottom variant="h5" component="div">
           {blog.title}
         </Typography>
+        <Typography variant="subtitle2" color="text.secondary">
+            Author: {blog.username} | Published: {blog.publishtime}
+        </Typography>
+        </div>
         <div dangerouslySetInnerHTML={{ __html: blog.description }}>
         </div>
       </CardContent>

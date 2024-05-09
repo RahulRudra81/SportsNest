@@ -9,13 +9,14 @@ import Loader from '../../public/page-loader/loader.gif'
 import Logo from '../../public/MainPageLogo.png'
 
 type Blog = {
+    blogid: number;
     title: string;
     shortdescription: string;
     description: string;
     imageurl: string;
-    blogid: number;
     category: string;
     username: string;
+    publishtime : string;
   }
 
 const BlogGrid = () => {
@@ -41,12 +42,14 @@ const blogs: Blog[] = useRecoilValue(blogsArrayState);
           {blogs.map((blog) => (
             <BlogCard
               key={blog.blogid}
+              id={blog.blogid}
               title={blog.title}
               shortDescription={blog.shortdescription}
               description={blog.description}
               imageUrl={blog.imageurl}
-              id={blog.blogid}
               category={blog.category}
+              username={blog.username}
+              publishtime={blog.publishtime}
             />
           ))}
         </div>

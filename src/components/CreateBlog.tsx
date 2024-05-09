@@ -12,7 +12,6 @@ import "react-quill/dist/quill.snow.css";
 // import { useUser } from '@clerk/clerk-react';
 // import { useAuth } from "@clerk/nextjs";
 import { useRouter } from 'next/navigation'
-import { ClassNames } from "@emotion/react";
 
 const CreateBlog = () => {
     const router = useRouter()
@@ -30,6 +29,7 @@ const CreateBlog = () => {
     // }, [userId]);
 
   const [title, setTitle] = useState<string>();
+  const [username, setUsername] = useState<string>();
   const [shortDescription, setShortDescription] = useState<string>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [file, setFile] = useState<File | null>();
@@ -68,6 +68,8 @@ const CreateBlog = () => {
     }
   };
 
+  const gmtDate = new Date();
+  const publishtime = gmtDate.toLocaleString();
   return (
     <div className="p-5">
       <div className="container mx-auto mt-8 flex flex-col items-center justify-center">
@@ -76,11 +78,10 @@ const CreateBlog = () => {
           className="w-full lg:px-60"
           onSubmit={async (e) => {
             e.preventDefault();
-            if (!title || !shortDescription || !description || !category) {
+            if (!title || !username || !shortDescription || !description || !category) {
               toast.error("Please fill in all required fields");
               return;
             }
-           
             const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/add-blog`, {
                 method: "POST",
                 headers: {
@@ -92,6 +93,8 @@ const CreateBlog = () => {
                   description,
                   "imageUrl" : imageUrl || "https://placehold.co/600x400/000000/FFF0",
                   category,
+                  username,
+                  publishtime
                 }),
               });
             
@@ -100,6 +103,7 @@ const CreateBlog = () => {
             else toast.error(data.message || "INTERNAL ERROR");
             
             setTitle("");
+            setUsername("");
             setShortDescription("");
             setDescription("");
             setFile(null);
@@ -117,6 +121,19 @@ const CreateBlog = () => {
               className="mt-1 p-2 border border-gray-300 rounded w-full"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="username" className="block text-gray-700">
+              Author's Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              className="mt-1 p-2 border border-gray-300 rounded w-full"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="mb-4">
