@@ -41,7 +41,7 @@ export default function BlockCard({ title, shortDescription, description, imageU
           }).then(async (result) => {
             if (result.isConfirmed) {
                 if (id) {
-                const res = await fetch('/api/blog/delete-blog', {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delete-blog`, {
                 method : "DELETE",
                 headers : {"blogid" : id.toString(),"Cache-Control": "no-store"}
                 })

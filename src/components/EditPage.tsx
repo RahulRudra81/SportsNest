@@ -102,7 +102,7 @@ const EditPage = () => {
             }
            
 
-            const res = await fetch("/api/blog/update-blog", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/update-blog`, {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json",

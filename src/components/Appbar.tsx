@@ -76,11 +76,11 @@ export default function SearchAppBar() {
       <AppBar position="static" color='primary'>
         <Toolbar className='flex md:justify-between max-sm:justify-normal items-center '>
           <Link href="/" className="max-sm:hidden" onClick={async () => {
-          const res = await fetch('/api/blog/all-blogs', {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/all-blogs`, {
             method : "GET",
           })
           const data = await res.json();
-          setBlogs(data.blogs.rows)
+          setBlogs(data.blogs)
           // setBlogs(res.);
         }}>
           <Image src = {Logo} alt = {'loading'} width={200} />
@@ -88,13 +88,13 @@ export default function SearchAppBar() {
         <form onSubmit={async (e) => {
                           e.preventDefault();
                           if (category) {
-                            const res = await fetch('/api/blog/get-blogs', {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-blogs`, {
                               method : "GET",
                               headers : {"category" : category}
                             })
                             const data = await res.json();
-                            console.log(data.blogs.rows)
-                            setBlogs(data.blogs.rows) 
+                            console.log(data.blogs)
+                            setBlogs(data.blogs) 
                           }
                           setCategory('')
                         }}>

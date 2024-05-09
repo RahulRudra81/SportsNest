@@ -81,7 +81,7 @@ const CreateBlog = () => {
               return;
             }
            
-            const res = await fetch("/api/blog/add-blog", {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/add-blog`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
