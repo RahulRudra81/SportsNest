@@ -33,7 +33,7 @@ export const ShowBlog = ({id} : any) => {
     useEffect (() => {
         const fun = async () => {
             try{
-            const res = await fetch (`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-blog`, {
+            const res = await fetch (`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/get-blog`, {
                 method : "GET",
                 headers : {
                     "Content-Type": "application/json",
@@ -41,8 +41,8 @@ export const ShowBlog = ({id} : any) => {
                 }
             })
             const data = await res.json();
-            console.log(data.blogs[0])
-            setBlog(data.blogs[0]);
+            console.log(data.blogs.rows[0])
+            setBlog(data.blogs.rows[0]);
             }
             catch (err) {
                 console.log(err);
@@ -55,10 +55,10 @@ export const ShowBlog = ({id} : any) => {
 
     
   return (
-    <div className='w-screen p-10'>
+    <div className='w-screen p-10 mt-20'>
     <Card sx={{ maxWidth: 14440 }}>
-      <div className='flex justify-center items-center'>
-      <img src = {blog.imageurl} className='w-60 h-60 ' />
+      <div className='flex justify-center items-centerm p-5'>
+      <img src = {blog.imageurl} className='w-60 h-60' />
       </div>
       <CardContent>
         <div className='mb-10'>

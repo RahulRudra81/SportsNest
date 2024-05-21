@@ -23,6 +23,7 @@ import 'sweetalert2/src/sweetalert2.scss'
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 import { useState } from 'react';
+import { useUser } from '@clerk/clerk-react';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -39,7 +40,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function BlockCard({ title, shortDescription, description, imageUrl, id, category, username, publishtime } : 
+export default function BlockCard({ title, shortDescription, description, imageUrl, id, category, username, publishtime,userimageurl } : 
         {
             title : string
             shortDescription : string
@@ -49,9 +50,11 @@ export default function BlockCard({ title, shortDescription, description, imageU
             category : string
             username : string
             publishtime : string
+            userimageurl : string
         }){
-
-
+      
+      const { user } = useUser();
+      const currentUser = user?.username;
       const setEditblog = useSetRecoilState(editblogState);
       const router = useRouter();
       const [like, setLike] = useState(false)
@@ -67,7 +70,7 @@ export default function BlockCard({ title, shortDescription, description, imageU
             }).then(async (result) => {
               if (result.isConfirmed) {
                   if (id) {
-                  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delete-blog`, {
+                  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/delete-blog`, {
                   method : "DELETE",
                   headers : {"blogid" : id.toString(),"Cache-Control": "no-store"}
                   })
@@ -97,12 +100,13 @@ export default function BlockCard({ title, shortDescription, description, imageU
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <div className='relative '>
+    <Card sx={{height:470, maxWidth: 345}}>
       <Link href={`show-blog/${id}`}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            
+            <img src={userimageurl}/>
           </Avatar>
         }
         title={username}
@@ -125,6 +129,8 @@ export default function BlockCard({ title, shortDescription, description, imageU
       </CardContent>
       </Link>
       <div className='p-2'><Button variant='outlined'  size="small">{category}</Button></div>
+      
+      <div className='absolute w-80 bottom-0'>
       <div className='flex justify-between items-center'>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={() => {setLike(!like)}}>
@@ -135,13 +141,16 @@ export default function BlockCard({ title, shortDescription, description, imageU
         </IconButton>
         
       </CardActions>
+      {currentUser == username && 
       <CardActions>
            <Button size="small" onClick={handleEdit}>Edit</Button>
            <Button size="small" onClick={handleDelete}>Delete</Button>
          </CardActions>
+        }
          </div>
-        
+         </div>
     </Card>
+    </div>
   );
 }
 

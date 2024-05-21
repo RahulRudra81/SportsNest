@@ -17,6 +17,7 @@ type Blog = {
     category: string;
     username: string;
     publishtime : string;
+    userimageurl : string;
   }
 
 const BlogGrid = () => {
@@ -50,6 +51,7 @@ const blogs: Blog[] = useRecoilValue(blogsArrayState);
               category={blog.category}
               username={blog.username}
               publishtime={blog.publishtime}
+              userimageurl={blog.userimageurl}
             />
           ))}
         </div>

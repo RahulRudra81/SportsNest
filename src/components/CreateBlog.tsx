@@ -9,27 +9,23 @@ import Image from "next/image";
 import loader from "../../public/create-blog-loader/Loader.gif";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-// import { useUser } from '@clerk/clerk-react';
-// import { useAuth } from "@clerk/nextjs";
+import { useUser } from '@clerk/clerk-react';
+import { useAuth } from "@clerk/nextjs";
 import { useRouter } from 'next/navigation'
 
 const CreateBlog = () => {
     const router = useRouter()
-    // const { user } = useUser();
-    // const username = user?.username;
-    // const {userId} = useAuth();
-    // useEffect(() => {
-    //     setTimeout(()=>{
-    //         if (!userId) {
-    //             router.push('/', { scroll: false })
-    //             }
-    //     }, 3000)
-        
-        
-    // }, [userId]);
+    const { user } = useUser();
+    const username = user?.username;
+    const userimageurl = user?.imageUrl;
+    const {userId} = useAuth();
+    useEffect(() => {
+      if (!userId) {
+          router.push('/', { scroll: false })
+          }
+    }, [userId]);
 
   const [title, setTitle] = useState<string>();
-  const [username, setUsername] = useState<string>();
   const [shortDescription, setShortDescription] = useState<string>();
   const [imageUrl, setImageUrl] = useState<string>();
   const [file, setFile] = useState<File | null>();
@@ -78,11 +74,11 @@ const CreateBlog = () => {
           className="w-full lg:px-60"
           onSubmit={async (e) => {
             e.preventDefault();
-            if (!title || !username || !shortDescription || !description || !category) {
+            if (!title || !shortDescription || !description || !category) {
               toast.error("Please fill in all required fields");
               return;
             }
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/add-blog`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/add-blog`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -94,7 +90,8 @@ const CreateBlog = () => {
                   "imageUrl" : imageUrl || "https://placehold.co/600x400/000000/FFF0",
                   category,
                   username,
-                  publishtime
+                  publishtime,
+                  userimageurl
                 }),
               });
             
@@ -103,7 +100,6 @@ const CreateBlog = () => {
             else toast.error(data.message || "INTERNAL ERROR");
             
             setTitle("");
-            setUsername("");
             setShortDescription("");
             setDescription("");
             setFile(null);
@@ -124,17 +120,6 @@ const CreateBlog = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-gray-700">
-              Author's Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              className="mt-1 p-2 border border-gray-300 rounded w-full"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
           </div>
           <div className="mb-4">
             <label htmlFor="shortDescription" className="block text-gray-700">

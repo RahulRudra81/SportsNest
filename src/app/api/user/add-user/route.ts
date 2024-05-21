@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import { sql } from "@vercel/postgres";
 
+import { unstable_noStore as noStore } from 'next/cache';
 
 
 export async function POST(request: Request) {
-    const username = request.headers.get('username')
+    noStore();
+    const data = await request.json();
+    const {username, userImageUrl } = data;
     if (username) {
         try{
             const res = await sql `SELECT * FROM users WHERE username = ${username};`;
@@ -13,7 +16,7 @@ export async function POST(request: Request) {
             }
             else {
                 try{
-                    await sql`INSERT INTO users (username) VALUES (${username});`
+                    await sql`INSERT INTO users (username, userimageurl) VALUES (${username}, ${userImageUrl});`
                     return NextResponse.json({"message" : "user added"})
                 } catch (err) {
                     console.log(err)

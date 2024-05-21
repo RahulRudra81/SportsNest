@@ -16,6 +16,10 @@ import Logo from "../../public/Logo.png"
 import Image from "next/image";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState } from 'react';
+import { UserButton } from "@clerk/nextjs";
+import { useUser } from '@clerk/clerk-react';
+import { useAuth } from "@clerk/nextjs";
+import { useEffect } from 'react';
 
 const theme = createTheme({
   palette: {
@@ -69,32 +73,131 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchAppBar() {
+  const { user } = useUser();
+  const {userId} = useAuth();
+  const username = user?.username;
+  const userImageUrl = user?.imageUrl;
   const setBlogs = useSetRecoilState(blogsState);
   const [category, setCategory] = useState<string>();
+  const [showMenu, setShowMenu] = useState<boolean>(false)
+
+  // useEffect(() => {
+  //   const fun = async () => {
+  //     if (username)
+  //     {
+  //         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/add-user`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body : JSON.stringify( {
+  //           username,
+  //           userImageUrl
+  //         }
+  //         )
+  //       });
+  //       // console.log(res)
+  //     }
+  //   }
+
+  //   fun();
+
+  // }, [username])
+
+
   return (
-      <ThemeProvider theme={theme}>
-      <AppBar position="static" color='primary'>
-        <Toolbar className='flex md:justify-between max-sm:justify-normal items-center '>
-          <Link href="/" className="max-sm:hidden" onClick={async () => {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/all-blogs`, {
+    <div className='fixed top-0 left-0 right-0 z-50 shadow-md'>
+      {showMenu && <div className='bg-[#393E46] py-5 absolute top-14'>
+      
+      { userId ? <>
+                   <div className="mx-5 flex flex-col justify-between items-center gap-5">
+                   <Link href="/"  onClick={async () => {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/all-blogs`, {
             method : "GET",
           })
           const data = await res.json();
-          setBlogs(data.blogs)
+          setBlogs(data.blogs.rows)
+          setShowMenu(false)
+          // setBlogs(res.);
+        }}>
+          <p className='text-gray-300 text-sm'>Home</p>
+        </Link>
+                   <Link href="/" onClick={async () => {
+                  
+                  if (username){
+                  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/my-blogs`, {
+                    method : "GET",
+                    headers : {"username" : username}
+                  })
+                  const data = await res.json();
+                  // console.log(data.blogs.rows)
+                  setBlogs(data.blogs.rows)
+                  setShowMenu(false)
+                }
+                // setBlogs(res.);
+              }}><p className="text-gray-300 text-sm cursor-pointer">My Blogs</p></Link>
+                <UserButton/>
+                </div>
+            </> : <div className='mx-5 flex flex-col justify-between items-center gap-5'>
+            <Link href="/"  onClick={async () => {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/all-blogs`, {
+            method : "GET",
+          })
+          const data = await res.json();
+          setBlogs(data.blogs.rows)
+          setShowMenu(false)
+          // setBlogs(res.);
+        }}>
+          <p className='text-gray-300 text-sm -translate-x-2'>Home</p>
+        </Link>
+                <Link href="/sign-in" onClick={() => {setShowMenu(false)}}>
+                    <p className="text-gray-300 mr-4">Sign In</p>
+                </Link>
+                <Link href="/sign-up" onClick={() => {setShowMenu(false)}}>
+                    <p className="text-gray-300 border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-gray-800">
+                    Sign Up
+                    </p>
+                </Link>
+          </div>
+        }
+
+
+        </div>}
+      <ThemeProvider theme={theme}>
+      <AppBar position="static" color='primary'>
+        <Toolbar className='flex md:justify-between max-sm:justify-normal items-center '>
+        <div className='flex flex-row justify-center items-center'>
+        <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Link href="/" className="max-sm:hidden" onClick={async () => {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/all-blogs`, {
+            method : "GET",
+          })
+          const data = await res.json();
+          setBlogs(data.blogs.rows)
           // setBlogs(res.);
         }}>
           <Image src = {Logo} alt = {'loading'} width={200} />
         </Link>
+        </div>
         <form onSubmit={async (e) => {
                           e.preventDefault();
                           if (category) {
-                            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-blogs`, {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/get-blogs`, {
                               method : "GET",
                               headers : {"category" : category}
                             })
                             const data = await res.json();
-                            console.log(data.blogs)
-                            setBlogs(data.blogs) 
+                            console.log(data.blogs.rows)
+                            setBlogs(data.blogs.rows) 
                           }
                           setCategory('')
                         }}>
@@ -111,10 +214,13 @@ export default function SearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+             
+        
           </form>
         </Toolbar>
       </AppBar>
       </ThemeProvider>
+      </div>
   );
 }
 

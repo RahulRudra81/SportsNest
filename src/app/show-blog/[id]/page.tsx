@@ -33,7 +33,7 @@ export async function generateMetadata ({params} : any) {
 const fetchBlog = async (id : any) => {
    
    try{
-   const res = await fetch (`${process.env.NEXT_PUBLIC_BACKEND_URL}/get-blog`, {
+   const res = await fetch (`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/blog/get-blog`, {
       method : "GET",
       headers : {
          "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const fetchBlog = async (id : any) => {
    })
    const data = await res.json();
    // console.log(data.blogs.rows[0])
-   return data.blogs[0];
+   return data.blogs.rows[0];
    }
    catch (err) {
       console.log(err);

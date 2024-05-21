@@ -4,16 +4,15 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 export async function POST(request: Request) {
     noStore();
-    const username = 'test'
     const data = await request.json();
-    const { title, shortDescription, description, imageUrl, category } = data;
+    const { title, username, shortDescription, description, imageUrl, category, userimageurl, publishtime } = data;
 
     try {
         // console.log(data);
         // console.log(username)
-        await sql`INSERT INTO blogs (title, shortDescription, description, imageUrl, category, username) 
+        await sql`INSERT INTO blogs (title, shortDescription, description, imageUrl, category, username, publishtime, userimageurl) 
             VALUES 
-            (${title}, ${shortDescription}, ${description}, ${imageUrl}, ${category}, ${username});`;
+            (${title}, ${shortDescription}, ${description}, ${imageUrl}, ${category}, ${username}, ${publishtime}, ${userimageurl});`;
 
         return NextResponse.json({ message: "Blog posted successfully" }, { headers: { "Cache-Control": "no-store" }});
     } catch (error) {
