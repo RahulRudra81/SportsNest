@@ -21,7 +21,7 @@ const CreateBlog = () => {
     const {userId} = useAuth();
     useEffect(() => {
       if (!userId) {
-          router.push('/', { scroll: false })
+          router.push('/sign-in', { scroll: false })
           }
     }, [userId]);
 
