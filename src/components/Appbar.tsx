@@ -185,7 +185,8 @@ export default function SearchAppBar() {
           setBlogs(data.blogs.rows)
           // setBlogs(res.);
         }}>
-          <Image src = {Logo} alt = {'loading'} width={200} />
+          <span className='font-extrabold text-2xl'>Sports Nest</span>
+          {/* <Image src = {Logo} alt = {'loading'} width={200} /> */}
         </Link>
         </div>
         <form onSubmit={async (e) => {
